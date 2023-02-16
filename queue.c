@@ -59,7 +59,9 @@ element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
     return NULL;
 }
 
-/* Return number of elements in queue */
+/* Return number of elements in queue
+ * Return 0 if q is NULL or empty
+ */
 int q_size(struct list_head *head)
 {
     if (!head)
