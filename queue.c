@@ -19,6 +19,7 @@ struct list_head *q_new()
         return NULL;
 
     INIT_LIST_HEAD(q_head);
+
     return q_head;
 }
 
@@ -57,7 +58,7 @@ bool q_insert_head(struct list_head *head, char *s)
 
     strncpy(new_node->value, s, strlen(s) + 1);
     list_add(&new_node->list, head);
-    free(s);
+
     return true;
 }
 
@@ -83,20 +84,39 @@ bool q_insert_tail(struct list_head *head, char *s)
     /* need INIT_LIST_HEAD() when use list add tail */
 
     list_add_tail(&new_node->list, head);
-    free(s);
     return true;
 }
 
 /* Remove an element from head of queue */
 element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
 {
-    return NULL;
+    if (!head || list_empty(head))
+        return NULL;
+
+    element_t *f_node = list_first_entry(head, element_t, list);
+    list_del(&f_node->list);
+    if (sp) {
+        strncpy(sp, f_node->value, bufsize - 1);
+        *(sp + bufsize - 1) = '\0';
+    }
+
+    return f_node;
 }
 
 /* Remove an element from tail of queue */
 element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
 {
-    return NULL;
+    if (!head || list_empty(head))
+        return NULL;
+
+    element_t *l_node = list_last_entry(head, element_t, list);
+    list_del(&l_node->list);
+    if (sp) {
+        strncpy(sp, l_node->value, bufsize - 1);
+        *(sp + bufsize - 1) = '\0';
+    }
+
+    return l_node;
 }
 
 /* Return number of elements in queue */
